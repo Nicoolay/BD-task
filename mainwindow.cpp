@@ -91,31 +91,17 @@ void MainWindow::on_pb_request_clicked()
         m_dataBase->SendDataToUI(requestHorrors);
 }
 
-void MainWindow::ScreenDataFromDB(QSqlTableModel *newTableModel,
-                                  QSqlQueryModel *newQueryModel,
-                                  int typeRequest)
+void MainWindow::ScreenDataFromDB(QSqlTableModel* tableModel, QSqlQueryModel* queryModel, int typeRequest)
 {
-    if (m_tableModel) {
-        delete m_tableModel;
-        m_tableModel = nullptr;
-    }
-    if (m_queryModel) {
-        delete m_queryModel;
-        m_queryModel = nullptr;
-    }
+    if(typeRequest == requestAllFilms && queryModel) {
+        m_ui->tb_result->setModel(queryModel);
+        m_ui->tb_result->resizeColumnsToContents();
+        m_ui->tb_result->horizontalHeader()->setStretchLastSection(true);
 
-    switch (typeRequest) {
-    case requestAllFilms:
-        m_tableModel = newTableModel;
-        m_ui->tb_result->setModel(m_tableModel);
-        break;
-    case requestComedy:
-    case requestHorrors:
-        m_queryModel = newQueryModel;
-        m_ui->tb_result->setModel(m_queryModel);
-        break;
-    default:
-        break;
+    } else if((typeRequest == requestComedy || typeRequest == requestHorrors) && queryModel) {
+        m_ui->tb_result->setModel(queryModel);
+        m_ui->tb_result->resizeColumnsToContents();
+        m_ui->tb_result->horizontalHeader()->setStretchLastSection(true);
     }
 }
 
