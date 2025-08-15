@@ -42,21 +42,17 @@ void DataBase::DisconnectFromDataBase(QString nameDb)
     m_dataBase->close();
 }
 
-QSqlTableModel *DataBase::GetAllFilms()
+QSqlQueryModel *DataBase::GetAllFilms()
 {
-    QSqlTableModel *model = new QSqlTableModel(nullptr, *m_dataBase);
+    QSqlQueryModel *model = new QSqlQueryModel(this);
 
-    model->setTable("film");
-    model->select();
+       QString query = "SELECT title, description FROM film";
+       model->setQuery(query, *m_dataBase);
 
-    for (int i = 2; i < model->columnCount(); ++i) {
-        model->setHeaderData(i, Qt::Horizontal, "", Qt::DisplayRole);
-    }
+       model->setHeaderData(0, Qt::Horizontal, tr("Название фильма"));
+       model->setHeaderData(1, Qt::Horizontal, tr("Описание фильма"));
 
-    model->setHeaderData(0, Qt::Horizontal, "Название фильма");
-    model->setHeaderData(1, Qt::Horizontal, "Описание фильма");
-
-    return model;
+       return model;
 }
 
 QSqlQueryModel *DataBase::GetGenreFilms(const QString &genre)
@@ -89,7 +85,7 @@ void DataBase::SendDataToUI(int typeRequest)
 
     switch (typeRequest) {
     case requestAllFilms:
-        tableModel = GetAllFilms();
+        queryModel = GetAllFilms();  // Теперь тоже QSqlQueryModel
         break;
     case requestComedy:
         queryModel = GetGenreFilms("Comedy");
