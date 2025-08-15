@@ -28,7 +28,7 @@ public:
     void ConnectToDataBase(QVector<QString> dataForConnect);
     void DisconnectFromDataBase(QString nameDb = "");
 
-    QSqlTableModel* GetAllFilms();
+    QSqlQueryModel* GetAllFilms();
     QSqlQueryModel* GetGenreFilms(const QString& genre);
 
     QSqlError GetLastError(void);
